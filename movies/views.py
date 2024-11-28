@@ -54,6 +54,35 @@ class DramaMovieViewSet( viewsets.ModelViewSet):
     serializer_class = MovieSerializer # Note that I also added, genre to
                                        # fields of the serializer
     
+# But I cant keep doing the same thing over again, also If we do, 
+# What happens when there is new genre? Hence lets have a general
+# viewset that takes genre as param from API request and handles accordingly
+
+# First note that When user sends request for genre he will send as
+# /genre/Action or /genre/Drama etc, Hence
+# our router registration for this viewset must take the genre part and 
+# save it as path parameter. 
+
+# router.register(r'genre/(?P<genre>[\w-]+)', GenreMovieViewSet, basename='genre_movies')
+    # learn this RegExp here : https://chatgpt.com/share/6748ca44-4f88-8002-97de-63c9fec8f7cc
+    # also in the chatgpt pdf downloaded : GenreMovieViewSet.pdf
+
+class GenreMovieViewSet( viewsets.ModelViewSet):
+    serializer_class = MovieSerializer
+    # Now since we want to customize queryset that will be filter,
+    # We will extend the get_queryset() method hence property not necessary
+
+    def get_queryset(self):
+        # We need to get path params passed by user, but since we use
+        # named grouping with p<genre> it will saved as key-val pair 
+        # In all CBVs, kwargs is a dictionary attached to each class (self.kwargs)
+        # that stores the variables captured from the URL pattern (the "dynamic" parts of the URL)
+        genre_url = self.kwargs.get('genre') # get the genre from url
+
+        # Now filter and return the queryset
+        return MovieData.objects.filter(genre=genre_url)
+    # Now go back and register this viewset to router
+
 
 
 

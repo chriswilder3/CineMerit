@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from movies.views import MovieViewSet, DramaMovieViewSet
+from movies.views import MovieViewSet, DramaMovieViewSet, GenreMovieViewSet
 from rest_framework import routers
 # read more : https://www.django-rest-framework.org/api-guide/routers/
 # https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
@@ -38,6 +38,8 @@ router.register('movies',MovieViewSet, basename='all_movies')
 #  ViewSets for the same model especially since modelname is used as default
 # basename if unspecified. So Its always good to give basenames.
 router.register('drama',DramaMovieViewSet, basename ='drama_movies')
+
+router.register(r'genre/(?P<genre>[\w-]+)', GenreMovieViewSet, basename='genre_movies')
 
 urlpatterns = [
     path('', include(router.urls)),
