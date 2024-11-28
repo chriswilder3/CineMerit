@@ -41,7 +41,8 @@ class MovieViewSet(viewsets.ModelViewSet):
                         # operations on Movie model, appy the serializer
                         # We defined earlier.
 # Now set up main urls.py in project root.
-
+# But study these first : https://www.django-rest-framework.org/api-guide/routers/
+# https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
 
 
 

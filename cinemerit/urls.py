@@ -17,6 +17,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+from .views import MovieViewSet
+from rest_framework import routers
+# read more : https://www.django-rest-framework.org/api-guide/routers/
+# https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
+# Routers provide an easy and structured way to define the URLs for your API
+# endpoints and automatically handle the routing of HTTP requests to the
+# appropriate viewsets just like urlpatterns. Read chatgpt pdf : https://chatgpt.com/share/6748b26c-c400-8002-b6d9-416147ca5ab4
+
+router = routers.DefaultRouter() # While SimpleRouter maps viewsets to URLs
+                        # without appending any prefix, DefaultRouter adds prefit
+                        # ie, /(root) we can use to lists all viewsets under it.
+
+router.register('movies',MovieViewSet)  # We need to access using /movies/data 
+                         # Now this router acts like app's internal router
+                         # before, if we add it to urlpattern using 'include' 
+
+
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
+
