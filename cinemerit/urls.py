@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from .views import MovieViewSet
+from movies.views import MovieViewSet, DramaMovieViewSet
 from rest_framework import routers
 # read more : https://www.django-rest-framework.org/api-guide/routers/
 # https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
@@ -25,14 +25,19 @@ from rest_framework import routers
 # endpoints and automatically handle the routing of HTTP requests to the
 # appropriate viewsets just like urlpatterns. Read chatgpt pdf : https://chatgpt.com/share/6748b26c-c400-8002-b6d9-416147ca5ab4
 
-router = routers.DefaultRouter() # While SimpleRouter maps viewsets to URLs
-                        # without appending any prefix, DefaultRouter adds prefit
-                        # ie, /(root) we can use to lists all viewsets under it.
+# The Default router is same as Simplerouter, But it adds an additional
+# feature
+router = routers.DefaultRouter() 
 
-router.register('movies',MovieViewSet)  # We need to access using /movies/data 
-                         # Now this router acts like app's internal router
+router.register('movies',MovieViewSet, basename='all_movies')
+                         # We can access movies using /movies/ 
+                         # Now this router acts like an app's internal router 
                          # before, if we add it to urlpattern using 'include' 
 
+# Since we are adding another model, this causes error if we register multiple
+#  ViewSets for the same model especially since modelname is used as default
+# basename if unspecified. So Its always good to give basenames.
+router.register('drama',DramaMovieViewSet, basename ='drama_movies')
 
 urlpatterns = [
     path('', include(router.urls)),

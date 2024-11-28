@@ -44,7 +44,16 @@ class MovieViewSet(viewsets.ModelViewSet):
 # But study these first : https://www.django-rest-framework.org/api-guide/routers/
 # https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
 
+# Now We need to add API endpoints, Why? Note that Above viewset gives all
+# data at once, What if enduser wants to filter, based on fields like genre
+# Hence to send specific part of data only we need to assign urls, that
+# give filtered results to endusers.
 
+class DramaMovieViewSet( viewsets.ModelViewSet):
+    queryset = MovieData.objects.filter( genre = 'Drama') # Just give drama
+    serializer_class = MovieSerializer # Note that I also added, genre to
+                                       # fields of the serializer
+    
 
 
 

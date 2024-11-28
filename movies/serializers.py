@@ -25,7 +25,7 @@ class MovieSerializer( serializers.ModelSerializer):
 
     class Meta:
         model = MovieData
-        fields = ['id', 'name', 'duration', 'rating']
+        fields = ['id', 'name', 'duration', 'rating','genre']
         # Remember id is part of model by default.
         # Its better to include id as part of JSON for better API access.
 
