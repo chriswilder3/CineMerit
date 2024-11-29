@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
 </head>
-<body class="bg-slate-700 max-h-screen flex-col ">
-    <div class="text-slate-200 p-4 ">
+<body class="bg-slate-700 min-h-screen flex flex-col ">
+    <div class="text-slate-200 p-4 flex-1">
         <div class="flex gap-10">
             <a href="/">
                 <h1 class="text-5xl my-1 font-bold text-red-400">
@@ -24,7 +24,7 @@
         <p class="text-2xl font-semibold my-3"> Where imagination meets technology.</p>
         
         
-        <div class="MovieList flex justify-center flex-row flex-wrap gap-5 text-wrap m-5">
+        <div class="MovieList flex justify-center flex-wrap gap-5 text-wrap m-5">
             {% for movie in page_obj %}
                 <div class="max-w-52 bg-slate-600 justify-center items-center p-2 rounded-md">
                     <img class="w-48 "  src="{{movie.image.url}}" alt="">
@@ -36,8 +36,28 @@
                 </div>
             {% endfor %}
         </div> 
-      <div class="pagenav mx-auto flex gap-1 justify-center items-center
-            *:rounded mt-auto">   
+        </div>
+
+        <div class="pagination text-white mx-auto flex 
+         *:p-1 *:m-1 *:rounded ">
+            
+              {% if page_obj.has_previous %}
+                <a class="bg-slate-400 hover:scale-105" href="?page=1">&laquo; first</a>
+                <a class="bg-slate-400 hover:scale-105" href="?page={{ page_obj.previous_page_number }}">previous</a>
+              {% endif %}
+              
+              <span class="current bg-gray-600">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+              </span>
+              
+              {% if page_obj.has_next %}
+                <a class="bg-slate-400 hover:scale-105" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a class="bg-slate-400  hover:scale-105" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+            
+          </div>  
+      <div class="pagenav mx-auto flex gap-1 justify-center items-center p-4
+            *:rounded mt-auto text-slate-100 mb-10">   
 
         <!-- Navigation using Pagination -->
             <!-- Backward Nav Arrow -->
@@ -48,28 +68,28 @@
 
             {% if page_obj.has_previous %} 
                         
-                <a class="bg-slate-400 py-1 px-2" href="/?page={{prev_page_num}}"> < </a>
+                <a class="bg-slate-400 py-1 px-2" href="?page={{page_obj.previous_page_number}}"> < </a>
                         
             {% endif %}
             
         <!-- Individual Page buttons -->
-            {% for i in total_pages %}
+            {% for i in page_obj.paginator %}
                         
                         {% if i.number == page_obj.number %} 
-                        <a class="bg-slate-600 py-1 px-2" href="/?page={{i.number}}">{{i.number}}</a>
+                        <a class="bg-slate-600 py-1 px-2" href="?page={{i.number}}">{{i.number}}</a>
                         {% else %}
-                        <a class="bg-slate-400 py-1 px-2" href="/?page={{i.number}}">{{i.number}}</a>
+                        <a class="bg-slate-400 py-1 px-2" href="?page={{i.number}}">{{i.number}}</a>
                         {% endif %}
             {% endfor %}
 
         <!-- Forward Nav Arrow -->
             {% if page_obj.has_next %} 
                         
-                <a class="bg-slate-400 py-1 px-2" href="/?page={{next_page_num}}"> > </a>
+                <a class="bg-slate-400 py-1 px-2" href="?page={{page_obj.next_page_number}}"> > </a>
                         
             {% endif %}
            
         </div>   
-    </div>
+    
 </body>
 </html>

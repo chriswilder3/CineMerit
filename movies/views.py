@@ -128,7 +128,7 @@ def home( request):
     # the context. 
 
     # We can pass (total number of pages ) from paginator obj
-    total_pages = paginator.num_pages
+    # total_pages = paginator.num_pages
     # Or we can directly pass paginator object itself to access its 
     # attr/methods also.
 
@@ -140,8 +140,15 @@ def home( request):
     prev_page_num = page_obj.number -1
     next_page_num = page_obj.number +1
 
+    # I found out later that page_obj has already the 
+    # properties called : previous_page_number,next_page_number
+
+    # Also I found that We dont need to pass paginator, 
+    # Page obj has access to it. EX: page_obj.paginator.num_pages
+    # We dont need seperate paginator
+    
     context = { 'page_obj': page_obj,
-             'total_pages': paginator,
+             'paginator': paginator,
              'prev_page_num': prev_page_num,
              'next_page_num': next_page_num,
              }
