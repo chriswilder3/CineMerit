@@ -23,9 +23,16 @@ class MovieSerializer( serializers.ModelSerializer):
     # Hence We define model and fields inside its Meta class just 
     # like in the form to create it.
 
+    image = serializers.ImageField(max_length= None, use_url = True)
+    # max_length: Specifies the maximum length of the file path.
+    #     Default is None, meaning default max length for a FileField (100 chars).
+    # use_url:
+    #     True: Returns the full URL of the image in the serialized data.
+    #     False: Returns just the file path.
+
     class Meta:
         model = MovieData
-        fields = ['id', 'name', 'duration', 'rating','genre']
+        fields = ['id', 'name', 'duration', 'rating','genre','image']
         # Remember id is part of model by default.
         # Its better to include id as part of JSON for better API access.
 

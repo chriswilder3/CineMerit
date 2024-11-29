@@ -9,6 +9,8 @@ class MovieData( models.Model):
 
     # This was added after creation of viewset,router etc
     genre = models.CharField( max_length = 100, null = True)
+
+    image = models.ImageField( upload_to='movie_images', default='media/No_images.PNG')
     
 
     def __str__(self):
