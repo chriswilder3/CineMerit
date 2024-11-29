@@ -89,5 +89,5 @@ class GenreMovieViewSet( viewsets.ModelViewSet):
 class MovieListView(ListView ):
     model = MovieData
     context_object_name = 'movies'
-    template_name = ''
+    template_name = 'index.html'
 

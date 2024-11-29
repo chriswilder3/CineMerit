@@ -20,8 +20,11 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from movies import views
 from movies.views import MovieViewSet, DramaMovieViewSet, GenreMovieViewSet
 from rest_framework import routers
+
+
 # read more : https://www.django-rest-framework.org/api-guide/routers/
 # https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
 # Routers provide an easy and structured way to define the URLs for your API
@@ -46,9 +49,10 @@ router.register(r'genre/(?P<genre>[\w-]+)', GenreMovieViewSet, basename='genre_m
 
 urlpatterns = [
     path('api/', include(router.urls)), # to access APIs say localhost/api/movies etc
+                        # Dont give router path in quotes
     path('admin/', admin.site.urls),
-    path('', include(movies.urls)),
-
+    path('', include('movies.urls')), # These are template based views.
+                        # Give app paths in quotes
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
