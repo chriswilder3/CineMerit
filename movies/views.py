@@ -5,7 +5,10 @@ from .models import MovieData
 
 from django.views.generic import ListView
 
+from django.core.paginator import Paginator
+
 from rest_framework import viewsets
+
 
 # Views in DRF :
 # Learn the views, viewssets and other imp. concepts used in DRF 
@@ -108,7 +111,7 @@ def home( request):
 
     # Now we need to initialize Paginator, setting the data it should use
     # and no of items it should display per page.
-    paginator = Paginator( all_movies, 6)
+    paginator = Paginator( all_movies, 3)
 
     # Now how to navigate pages : This happens when user passes
     # quesry params like this ?page=3 
@@ -123,12 +126,39 @@ def home( request):
     # Now Page object contains the data to display in this current page 
     # along with its meta data. Hence it must be passed into 
     # the context. 
-    context = { 'page_obj': page_obj}
-    # In template we can get list of object in that page
-    # using page_obj.object_list and iterating through them just 
-    # like normal 
 
-    return render( request, 'index.html',context )
+    # We can pass (total number of pages ) from paginator obj
+    total_pages = paginator.num_pages
+    # Or we can directly pass paginator object itself to access its 
+    # attr/methods also.
+
+    # Note that Django Template Language doesnt support
+    # complex arithmatic other than addition, Hence 
+    # Lets handle logic and pass prev_page_num and next_page_num 
+    # in context
+
+    prev_page_num = page_obj.number -1
+    next_page_num = page_obj.number +1
+
+    context = { 'page_obj': page_obj,
+             'total_pages': paginator,
+             'prev_page_num': prev_page_num,
+             'next_page_num': next_page_num,
+             }
+
+    
+
+    # In template we can get list of objects in that page
+    # using page_obj.object_list and iterating through them just 
+    # like normal model object. OR we can treat page_obj itself
+    # like a list and loop throgh it.
+
+    # For forword and backwrd navigation etc, We use its properties like
+    # has_previous - has_next (both bool), number (current pg num),
+    # num_pages (from paginator obj)
+
+    return render( request, 'index.html',context ) # Lets make similar
+    # Index page for demo
 
 
 

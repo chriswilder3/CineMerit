@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
 </head>
-<body class="bg-slate-700 max-h-screen flex-col ">
+<body class="bg-slate-700">
     <div class="text-slate-200 p-4 ">
         <div class="flex gap-10">
             <a href="/">
@@ -32,44 +32,11 @@
                     <p class="text-lg"> {{ movie.duration }} Mins </p>
                     <p class="text-black"> {{ movie.rating }} </p>
                     <p> {{ movie.genre }} </p>
-                    
+    
                 </div>
             {% endfor %}
-        </div> 
-      <div class="pagenav mx-auto flex gap-1 justify-center items-center
-            *:rounded mt-auto">   
-
-        <!-- Navigation using Pagination -->
-            <!-- Backward Nav Arrow -->
-                <!-- Note that Django Template Language doesnt support
-                complex arithmatic other than addition, Hence 
-                Lets handle logic and pass prev_page_num and next_page_num 
-                in context  -->
-
-            {% if page_obj.has_previous %} 
-                        
-                <a class="bg-slate-400 py-1 px-2" href="/?page={{prev_page_num}}"> < </a>
-                        
-            {% endif %}
-            
-        <!-- Individual Page buttons -->
-            {% for i in total_pages %}
-                        
-                        {% if i.number == page_obj.number %} 
-                        <a class="bg-slate-600 py-1 px-2" href="/?page={{i.number}}">{{i.number}}</a>
-                        {% else %}
-                        <a class="bg-slate-400 py-1 px-2" href="/?page={{i.number}}">{{i.number}}</a>
-                        {% endif %}
-            {% endfor %}
-
-        <!-- Forward Nav Arrow -->
-            {% if page_obj.has_next %} 
-                        
-                <a class="bg-slate-400 py-1 px-2" href="/?page={{next_page_num}}"> > </a>
-                        
-            {% endif %}
-           
-        </div>   
+        </div>    
+        
     </div>
 </body>
 </html>
