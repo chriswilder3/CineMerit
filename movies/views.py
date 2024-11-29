@@ -87,6 +87,8 @@ class GenreMovieViewSet( viewsets.ModelViewSet):
         # Now filter and return the queryset
         return MovieData.objects.filter(genre=genre_url)
     # Now go back and register this viewset to router
+
+
 #----------------------Template Views from Now on----------------
 
 class MovieListView(ListView ):
@@ -94,6 +96,7 @@ class MovieListView(ListView ):
     context_object_name = 'movies'
     template_name = 'index.html'
     paginate_by = 4 # Allows automatic pagination
+
 
 # To demonstrate custom pagination, We will create above index view
 # But using function
@@ -111,17 +114,20 @@ def home( request):
 
     # Now we need to initialize Paginator, setting the data it should use
     # and no of items it should display per page.
-    paginator = Paginator( all_movies, 3)
+    
+     # paginator = Paginator( all_movies, 3)
 
     # Now how to navigate pages : This happens when user passes
     # quesry params like this ?page=3 
     # This parameter comes as part of the GET request. And as we know
     # we use .get() on GET or POSE request data to get query params
-    page_num = request.GET.get('page') 
+    
+      # page_num = request.GET.get('page') 
 
     # Now as read from above links and docs, The get_page is a method 
     # of paginator object, that takes page_num as arg, and return Page Obj
-    page_obj = paginator.get_page( page_num )
+    
+        # page_obj = paginator.get_page( page_num )
 
     # Now Page object contains the data to display in this current page 
     # along with its meta data. Hence it must be passed into 
@@ -137,8 +143,8 @@ def home( request):
     # Lets handle logic and pass prev_page_num and next_page_num 
     # in context
 
-    prev_page_num = page_obj.number -1
-    next_page_num = page_obj.number +1
+    # prev_page_num = page_obj.number -1
+    # next_page_num = page_obj.number +1
 
     # I found out later that page_obj has already the 
     # properties called : previous_page_number,next_page_number
@@ -146,12 +152,13 @@ def home( request):
     # Also I found that We dont need to pass paginator, 
     # Page obj has access to it. EX: page_obj.paginator.num_pages
     # We dont need seperate paginator
-    
-    context = { 'page_obj': page_obj,
-             'paginator': paginator,
-             'prev_page_num': prev_page_num,
-             'next_page_num': next_page_num,
-             }
+
+    # context = { 'page_obj': page_obj,
+    #          'paginator': paginator,
+    #          'prev_page_num': prev_page_num,
+    #          'next_page_num': next_page_num,
+    #          } 
+    # We have yet to filtering and searching, Hence commented this
 
     
 
@@ -164,9 +171,48 @@ def home( request):
     # has_previous - has_next (both bool), number (current pg num),
     # num_pages (from paginator obj)
 
-    return render( request, 'index.html',context ) # Lets make similar
-    # Index page for demo
+# -----------------------SEARCHING AND FILTERING-----------------
+
+    # Now we need to add search capabilities as well. First lets
+    # create form (get method) in the template, which will send the 
+    # term to search here.
+    movie_name = request.GET.get('movie_name') # In form, the input name 
+
+    if movie_name != '' and movie_name is not None:
+        # all_movies = MovieData.objects.filter(name = movie_name)
+        # This is not exactly searching, its filtering
+        #  We can make it strong.
+
+        # The __icontains lookup in Django is a query filter used 
+        # to perform case-insensitive substring searches on a database 
+        # field. It checks whether a given substring exists within the 
+        # value of a field and is particularly useful for implementing 
+        # search functionality. Works similar to regex.
+        all_movies = MovieData.objects.filter(name__icontains= movie_name)
+    
+    # If the movie name is valid, fetch all item in model that match
+    # And put them in paginate
+
+    paginator = Paginator( all_movies, 3)
 
 
+    page_num = request.GET.get('page') 
+
+    # Now as read from above links and docs, The get_page is a method 
+    # of paginator object, that takes page_num as arg, and return Page Obj
+    page_obj = paginator.get_page( page_num )
+
+    context = { 'page_obj': page_obj,
+             
+             }
+
+
+    return render( request, 'index.html',context ) 
+
+
+
+# For CBV ListViews, the context_object_name passed is attached
+# with all the page_object property/methods, if we give paginate_by param.
+# Ex : movies.next_page_number, 
 
 
