@@ -90,4 +90,46 @@ class MovieListView(ListView ):
     model = MovieData
     context_object_name = 'movies'
     template_name = 'index.html'
+    paginate_by = 4 # Allows automatic pagination
+
+# To demonstrate custom pagination, We will create above index view
+# But using function
+
+# We will need Paginator class here. 
+# Read : https://chatgpt.com/share/674a00ae-261c-8002-bf44-7a8f2ac1db70
+# or chatgpt pdf : pagination.pdf
+# https://docs.djangoproject.com/en/5.1/ref/paginator/#django.core.paginator.Paginator
+# https://docs.djangoproject.com/en/5.1/topics/pagination/
+
+# But first import Paginator from django.core.paginator
+
+def home( request):
+    all_movies = MovieData.objects.all()
+
+    # Now we need to initialize Paginator, setting the data it should use
+    # and no of items it should display per page.
+    paginator = Paginator( all_movies, 6)
+
+    # Now how to navigate pages : This happens when user passes
+    # quesry params like this ?page=3 
+    # This parameter comes as part of the GET request. And as we know
+    # we use .get() on GET or POSE request data to get query params
+    page_num = request.GET.get('page') 
+
+    # Now as read from above links and docs, The get_page is a method 
+    # of paginator object, that takes page_num as arg, and return Page Obj
+    page_obj = paginator.get_page( page_num )
+
+    # Now Page object contains the data to display in this current page 
+    # along with its meta data. Hence it must be passed into 
+    # the context. 
+    context = { 'page_obj': page_obj}
+    # In template we can get list of object in that page
+    # using page_obj.object_list and iterating through them just 
+    # like normal 
+
+    return render( request, 'index.html',context )
+
+
+
 
