@@ -3,6 +3,8 @@ from django.shortcuts import render
 from .serializers import MovieSerializer
 from .models import MovieData
 
+from django.views.generic import ListView
+
 from rest_framework import viewsets
 
 # Views in DRF :
@@ -82,7 +84,10 @@ class GenreMovieViewSet( viewsets.ModelViewSet):
         # Now filter and return the queryset
         return MovieData.objects.filter(genre=genre_url)
     # Now go back and register this viewset to router
+#----------------------Template Views from Now on----------------
 
-
-
+class MovieListView(ListView ):
+    model = MovieData
+    context_object_name = 'movies'
+    template_name = ''
 

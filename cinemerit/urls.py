@@ -45,8 +45,10 @@ router.register('drama',DramaMovieViewSet, basename ='drama_movies')
 router.register(r'genre/(?P<genre>[\w-]+)', GenreMovieViewSet, basename='genre_movies')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)), # to access APIs say localhost/api/movies etc
     path('admin/', admin.site.urls),
+    path('', include(movies.urls)),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
